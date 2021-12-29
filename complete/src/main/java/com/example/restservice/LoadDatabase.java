@@ -1,6 +1,10 @@
 package com.example.restservice;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.example.restservice.Entities.Client;
+import com.example.restservice.Entities.Invoice;
 import com.example.restservice.Repositories.ClientRepository;
 import com.example.restservice.Repositories.InvoiceRepository;
 
@@ -34,7 +38,7 @@ class LoadDatabase {
         log.info("Preloading " + ClientRepository.save(client5));
         log.info("Preloading " + ClientRepository.save(client6));
         
-        /*
+        
         //Generate Invoice
         List<Client> clientsList1 = Arrays.asList(client1, client2, client3);
         List<Client> clientsList2 = Arrays.asList(client3, client5, client4);
@@ -44,7 +48,7 @@ class LoadDatabase {
         log.info("Preloading " + InvoiceRepository.save(new Invoice(1, 1, clientsList1)));
         log.info("Preloading " + InvoiceRepository.save(new Invoice(2, 2, clientsList2)));
         log.info("Preloading " + InvoiceRepository.save(new Invoice(3, 3, clientsList3)));       
-        */
+        
       };
     }
 }

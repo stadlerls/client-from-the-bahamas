@@ -10,7 +10,6 @@ import com.example.restservice.Repositories.ClientRepository;
 import com.example.restservice.Repositories.InvoiceDetailsRepository;
 import com.example.restservice.Repositories.InvoiceRepository;
 
-import org.hibernate.Criteria;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,6 +67,7 @@ public class StoreBahamasController {
 		@RequestParam(name = "fiscal_id") String fiscal_id, 
 		@RequestParam(name = "name") String name,
 		@RequestParam(name = "email") String email) throws Exception {
+			
 			Invoice invoice = new Invoice();
 			Client client = new Client();
 			

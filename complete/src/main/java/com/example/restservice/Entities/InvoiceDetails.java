@@ -22,8 +22,8 @@ public class InvoiceDetails {
     @ManyToOne
     Invoice invoice;
 
+    @JoinColumn(name = "client_id", referencedColumnName = "client_id", insertable = false, updatable = false)
     @ManyToOne
-    @JoinColumn(name = "client_id")
     Client client;
     
     public long getInvoiceDetailsId() {
