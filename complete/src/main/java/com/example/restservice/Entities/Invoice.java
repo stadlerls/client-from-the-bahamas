@@ -3,12 +3,8 @@ package com.example.restservice.Entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity(name="invoice")
@@ -16,19 +12,18 @@ import javax.persistence.Table;
 public class Invoice {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long id;
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long invoice_id;
     private long fiscal_id;
     
-    @OneToMany(mappedBy = "clientId", cascade = CascadeType.ALL, orphanRemoval = true)
+    //@OneToMany(mappedBy = "invoice_id", cascade = CascadeType.ALL, orphanRemoval = true)
     //@JoinTable(name = "CLIENT" , joinColumns = @JoinColumn(name = "clientId"))
-    private List<Client> clients = new ArrayList<Client>();
+    //private List<Client> clients = new ArrayList<Client>();
     
-    public Invoice(long id, long fiscal_id, List<Client> clients){
+    public Invoice(long invoice_id, long fiscal_id){
 
-        this.id = id;
+        this.invoice_id = invoice_id;
         this.fiscal_id = fiscal_id;
-        this.clients = clients;
         
     }
 
@@ -37,15 +32,19 @@ public class Invoice {
     }
 
     public long getinvoiceId() {
-		return id;
+		return invoice_id;
 	}
 
     public long getFiscalId() {
 		return fiscal_id;
 	}
 
-    public List<Client> getClients(){
-        return clients;
+    public void setinvoiceId(long invoiceId){
+        this.invoice_id = invoiceId;
+    }
+
+    public void setfiscalId(long fiscalId){
+        this.fiscal_id = fiscalId;
     }
 
 }

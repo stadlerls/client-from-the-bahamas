@@ -12,8 +12,8 @@ public class Client {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "clientId", updatable = false)
-	private long clientId;
+	@Column(name = "client_id", updatable = false)
+	private long client_id;
 
 	@Column(name = "name", nullable = false)
 	private String name;
@@ -21,9 +21,9 @@ public class Client {
 	@Column(name = "email", nullable = false)
 	private String email;
 	
-	public Client(long clientId, String name, String email) {
+	public Client(long client_id, String name, String email) {
 		
-		this.clientId = clientId;
+		this.client_id = client_id;
 		this.name = name;
 		this.email = email;
 	}
@@ -31,8 +31,8 @@ public class Client {
 	public Client() {
 	}
 
-	public long getClientId() {
-		return clientId;
+	public long getClient_id() {
+		return client_id;
 	}
 
 	public String getName() {
@@ -41,6 +41,18 @@ public class Client {
 
 	public String getEmail() {
 		return email;
+	}
+
+	public void setClient_id(Long client_id) {
+		 this.client_id = client_id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 }
