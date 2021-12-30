@@ -1,4 +1,6 @@
 package com.example.restservice;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import com.example.restservice.Entities.Client;
@@ -53,12 +55,37 @@ public class StoreBahamasController {
 		return null;
 
 	}
+	
+	@PostMapping("/store-client/")
+	@ResponseBody
+	Client storeClient( 
+		@RequestParam(name = "name") String name,
+		@RequestParam(name = "email") String email){
+
+			try {
+				Client client = new Client();
+				client.setName(name);
+				client.setEmail(email);
+				return clientrepository.save(client);
+			} catch (Exception e) {
+				//TODO: handle exception
+			}
+
+			return null;
+
+	}
 
 	//Invoice
 	@GetMapping("/invoices")
 	List<Invoice> allInvoices() {
 		return invoicerepository.findAll();
 	}
+
+	@GetMapping("/invoicesDetails")
+	List<InvoiceDetails> allInvoicesDetails() {
+		return invoiceDetailsrepository.findAll();
+	}
+
 	
 	@PostMapping("/store-bahamas-client/{invoice_id}")
 	@ResponseBody
@@ -70,89 +97,63 @@ public class StoreBahamasController {
 			
 			Invoice invoice = new Invoice();
 			Client client = new Client();
-			
-			invoice.setinvoiceId(invoice_id);
-			invoice.setfiscalId(Long.parseLong(fiscal_id));
 
 			client.setName(name);
 			client.setEmail(email);
 
-			if (invoicerepository.findById(invoice_id).isPresent()) {
-				
-				Client clientExists = new Client();
-				try {
-					clientExists = findClientByName(name);
-				} catch (Exception e) {
-					//TODO: handle exception
-				}
-				if(null != clientExists){
-					return invoicerepository.findById(invoice_id).orElseThrow(() -> new InvoiceNotFoundException(invoice_id));
+			if (invoicerepository.verifyRegistry(invoice_id)) {
+				if(clientrepository.verifyRegistry(name)){
+
+					invoice = invoicerepository.getById(invoice_id);
+					Iterator<Client> clientsList = invoice.getClients().iterator();
+					boolean clientInList = false;
+					while(clientsList.hasNext()) {
+						if(clientsList.next().getEmail().equals(email)){
+							clientInList = true;
+						}
+					}
+					if(clientInList){
+						return invoicerepository.findById(invoice_id).orElseThrow(() -> new InvoiceNotFoundException(invoice_id));
+					}else{
+						Client ExistingClient = clientrepository.findByName(name);
+						invoice = invoicerepository.getById(invoice_id);
+						invoice.getClients().add(ExistingClient);
+						return invoicerepository.save(new Invoice(invoice_id, Long.parseLong(fiscal_id), invoice.getClients()));
+					}
 				}else{
-					Client clientSuccess = new Client();
 					try {
-						clientSuccess = addClient(client);
-					}
-					catch (Exception e) {
-						//TODO: handle exception
-					}
-					if(null != clientSuccess){
-						InvoiceDetails invoiceDetailsSucess = new InvoiceDetails();
-						//Inverter método para retornar detalhes ao invés do Invoice
-						try {
-							invoiceDetailsSucess = addInvoiceDetails(invoice, clientSuccess);
-						} catch (Exception e) {
-							//TODO: handle exception
-						}
-						if(null != invoiceDetailsSucess){
-							return invoicerepository.save(invoice);
-						}
-					}
-				}
-			}else{
-				Client clientExists = new Client();
-				try {
-					clientExists = findClientByName(name);
-				} catch (Exception e) {
-					//TODO: handle exception
-				}
-				if(null == clientExists){
-					try {
-						Client clientSuccess = new Client();
-						clientSuccess = addClient(client);
-						if(null != clientSuccess){
-							//Insert Details da Invoice
-							InvoiceDetails invoiceDetailsSucess = new InvoiceDetails();
-							//Inverter método para retornar detalhes ao invés do Invoice
-							try {
-								invoiceDetailsSucess = addInvoiceDetails(invoice, clientSuccess);
-							} catch (Exception e) {
-								//TODO: handle exception
-							}
-							if(null != invoiceDetailsSucess){
-								return invoicerepository.save(invoice);
-							}
-						}
+						Client newClient = clientrepository.save(client);
+						invoice = invoicerepository.getById(invoice_id);
+						invoice.getClients().add(newClient);
+						return invoicerepository.save(new Invoice(invoice_id, Long.parseLong(fiscal_id), invoice.getClients()));
 					} catch (Exception e) {
 						//TODO: handle exception
 					}
 				}
+			}else{
+				if(!clientrepository.verifyRegistry(name)){
+					try {
+						Client newClient = clientrepository.save(client);
+						List<Client> clientsList = Arrays.asList(newClient);	
+						return invoicerepository.save(new Invoice(invoice_id, Long.parseLong(fiscal_id), clientsList));
+					} catch (Exception e) {
+						//TODO: handle exception
+					}
+					
+				}else{
+
+					try {
+						Client ExistingClient = clientrepository.findByName(name);
+						List<Client> clientsList = Arrays.asList(ExistingClient);	
+						return invoicerepository.save(new Invoice(invoice_id, Long.parseLong(fiscal_id), clientsList));
+					} catch (Exception e) {
+						//TODO: handle exception
+					}
+
+				}
 				return invoicerepository.save(invoice);
 			}
 			return invoicerepository.findById(invoice_id).orElseThrow(() -> new InvoiceNotFoundException(invoice_id));		
-	}
-
-	Client addClient(Client client)throws Exception {
-
-		return clientrepository.save(client);
-
-	}
-
-	InvoiceDetails addInvoiceDetails(Invoice invoice, Client client)throws Exception {
-
-		InvoiceDetails invoiceDetails = new InvoiceDetails();
-
-		return invoiceDetailsrepository.save(invoiceDetails);
-
 	}
 
 	@GetMapping("/retrieve-bahamas-client/{invoice_id}")
