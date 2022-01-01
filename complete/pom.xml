@@ -39,16 +39,7 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/net.jadler/jadler-all -->
-		<dependency>
-			<groupId>net.jadler</groupId>
-			<artifactId>jadler-all</artifactId>
-			<version>1.3.0</version>
-			<scope>test</scope>
-		</dependency>
-
 	</dependencies>
-	
 
 	<build>
 		<plugins>

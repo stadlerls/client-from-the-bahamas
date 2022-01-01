@@ -1,7 +1,10 @@
 package com.example.restservice;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.servlet.ServletException;
 
 import com.example.restservice.Entities.Client;
 import com.example.restservice.Entities.Invoice;
@@ -25,11 +28,18 @@ public class StoreBahamasController {
 	private final ClientRepository clientrepository;
 	private final InvoiceRepository invoicerepository;
 	private final InvoiceDetailsRepository invoiceDetailsrepository;
+	private RestService restService;
 
-	StoreBahamasController(ClientRepository Clientrepository, InvoiceRepository InvoiceRepository, InvoiceDetailsRepository InvoiceDetailsrepository) {
+	StoreBahamasController(
+		ClientRepository Clientrepository,
+		InvoiceRepository InvoiceRepository, 
+		InvoiceDetailsRepository InvoiceDetailsrepository, 
+		RestService RestService) {
+			
 		this.clientrepository = Clientrepository;
 		this.invoicerepository = InvoiceRepository;
 		this.invoiceDetailsrepository = InvoiceDetailsrepository;
+		this.restService = RestService;
 	}
 	
 	//Client
@@ -55,23 +65,22 @@ public class StoreBahamasController {
 		return null;
 
 	}
-	
+
 	@PostMapping("/store-client/")
 	@ResponseBody
-	Client storeClient( 
+	public void storeClient( 
 		@RequestParam(name = "name") String name,
-		@RequestParam(name = "email") String email){
+		@RequestParam(name = "email") String email) throws IOException, ServletException{
 
 			try {
 				Client client = new Client();
 				client.setName(name);
 				client.setEmail(email);
-				return clientrepository.save(client);
+				clientrepository.save(client);
+
 			} catch (Exception e) {
 				//TODO: handle exception
 			}
-
-			return null;
 
 	}
 
@@ -85,7 +94,6 @@ public class StoreBahamasController {
 	List<InvoiceDetails> allInvoicesDetails() {
 		return invoiceDetailsrepository.findAll();
 	}
-
 	
 	@PostMapping("/store-bahamas-client/{invoice_id}")
 	@ResponseBody
@@ -134,6 +142,7 @@ public class StoreBahamasController {
 				if(!clientrepository.verifyRegistry(name)){
 					try {
 						Client newClient = clientrepository.save(client);
+						Client clientRegistered = restService.bahamasRegister(invoice_id, Long.parseLong(fiscal_id), name, email);
 						List<Client> clientsList = Arrays.asList(newClient);	
 						return invoicerepository.save(new Invoice(invoice_id, Long.parseLong(fiscal_id), clientsList));
 					} catch (Exception e) {
@@ -161,6 +170,4 @@ public class StoreBahamasController {
 		
 		return invoicerepository.findById(invoice_id).orElseThrow(() -> new InvoiceNotFoundException(invoice_id));
 	}
-
-
 }

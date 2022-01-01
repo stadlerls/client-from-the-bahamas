@@ -1,4 +1,5 @@
 target
+*/target/*
 .vscode/*
 test
 gradler-wrapper.jar
