@@ -3,7 +3,7 @@ InvoiceXpress challenge
 
 ### Hi there, my name is Leonardo Stadler and I'm a software Developer and a security specialist. 👋
 
-[![Linkedin Badge](https://img.shields.io/badge/-Leonardo%20Paulo-18186f?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/leonardostadler/)](https://www.linkedin.com/in/leonardostadler/) 
+[![Linkedin Badge](https://img.shields.io/badge/-Leonardo%20Stadler-18186f?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/leonardostadler/)](https://www.linkedin.com/in/leonardostadler/) 
 
 
 ### *Challenge: Client from the Bahamas *
