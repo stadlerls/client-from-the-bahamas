@@ -1,0 +1,29 @@
+const sqlite3 = require('sqlite3').verbose();
+var jwt = require('jsonwebtoken');
+const KEY = "m yincredibl y(!!1!11!)<'SECRET>)Key'!";
+
+let db = new sqlite3.Database('./users.db', sqlite3.OPEN_READWRITE, (err) => {
+  if (err) {
+    console.error(err.message);
+  }
+  var username = "leo@z3g";
+  var password = "3140d59420ca920c79fdef003360543c12b14da984f00f8665756e9da9c4b743";
+  
+  db.get("SELECT * FROM users WHERE (username, password) = (?, ?)", [username, password], function(err, row) {
+      console.log(row);
+      if(row != undefined ) {
+        var payload = {
+          username: username,
+        };
+        var token = jwt.sign(payload, KEY, {algorithm: 'HS256', expiresIn: "15d"});
+        console.log("Success");
+        console.log(token);
+      } else {
+        console.error("Failure");
+        //res.status(401)
+        //res.send("There's no user matching that");
+      }
+    });
+  db.close
+  console.log('Connected to the chinook database.');
+});
