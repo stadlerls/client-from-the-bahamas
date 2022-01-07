@@ -10,5 +10,9 @@ InvoiceXpress challenge
 
 ### *I've developed this small application using SpringBoot + Maven 
 
+### *Swagger *
+/v2/api-docs
+/swagger-ui/#/
+
 ### *Postman Urls: Client from the Bahamas *
 https://go.postman.co/workspace/My-Workspace~fee8ec4b-b1ad-4d87-843d-02d215c50c22/collection/6667681-db136165-8b09-4ed2-b318-3bfe23874f26
