@@ -1,5 +1,5 @@
 # Desafio Técnico - Construção de uma API com Spring Boot
-
+Detalhes do desafio [GitHub](https://github.com/weareswat/challenges/blob/master/1-development/client-from-the-bahamas.md)
 Este repositório contém minha solução para o desafio técnico proposto durante o processo seletivo para a Kwan. O desafio consistia na construção de uma API em Java com Spring Boot, que atendesse a diversos requisitos.
 
 ## Desafios Abordados
